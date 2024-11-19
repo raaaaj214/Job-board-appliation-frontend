@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Tile from '../_components/Tile/Tile'
 
-const page = () => {
+const Page = () => {
     const [data , setData] = useState([])
     useEffect(() => {
         const fetchData = async () => {
@@ -12,7 +12,6 @@ const page = () => {
             })
             const data = await res.json();
             setData(data.companies);
-            console.log(data.companies)
         }
 
         fetchData();
@@ -24,5 +23,5 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
 

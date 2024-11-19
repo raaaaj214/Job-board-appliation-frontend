@@ -19,9 +19,11 @@ module.exports = {
     },
     extend: {
       colors : {
-        primary : "#3B82F6",
-        secondary : "#9CA3AF",
-        button : "#0000FF",
+        primary : "#0866FF",
+        secondary : "#1877F2",
+        tertiary : "#2196f3",
+        accent : "#F0F2F5",
+        fourth : "#FFFFFF",
         button_disabled : "#808080"
       },
       keyframes: {

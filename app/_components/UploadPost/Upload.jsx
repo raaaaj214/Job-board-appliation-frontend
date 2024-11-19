@@ -15,7 +15,6 @@ const Upload = () => {
         setDisabled(true)
         const arrayOfRequirements = data.requirements.split(",").map((str) => {return str.trim()})
         data.requirements = arrayOfRequirements
-        console.log(data)
         const res = await fetch("http://localhost:4000/company/newjobpost" , {
             headers :  {
                 'Content-Type': 'application/json'
@@ -31,22 +30,25 @@ const Upload = () => {
         reset()
       }
 return (
-    <form className='flex flex-col justify-center items-center bg-gray-200 gap-8 px-4 py-4 rounded-lg sm:w-6/12' onSubmit={handleSubmit(onSubmit)}>
+    <form className='flex flex-col justify-center items-center bg-white gap-8 px-4 py-4 rounded-lg w-full md:w-2/3 xl:w-6/12' onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="position" className='w-full  gap-2 flex flex-col'>Position &nbsp;
-            <input type="text" className='w-full p-2 focus:border-none focus:outline-none' id="position" {...register('position' , {required : true})} placeholder='Position' /></label>
+            <input type="text" className='w-full py-2 px-4 border-2  rounded-lg' id="position" {...register('position' , {required : true})} placeholder='Position' />
                 {errors.position?.type === "required" && (
-                    <p className="errorMsg">Position is required.</p>
+                    <p className="text-red-500 font-semibold">Position is required.</p>
                 )}
-                <label htmlFor="location" className='w-full  gap-2flex flex-col'>Location  &nbsp;
-            <input type="text" id="location" className='w-full p-2 focus:border-none focus:outline-none' {...register('location', {required : true})} placeholder='Location'/></label>
+                </label>
+                <label htmlFor="location" className='w-full  gap-2 flex flex-col'>Location  &nbsp;
+            <input type="text" id="location" className='w-full p-2 border-2  rounded-lg' {...register('location', {required : true})} placeholder='Location'/>
             {errors.location?.type === "required" && (
-                    <p className="errorMsg">location is required.</p>
+                    <p className="text-red-500 font-semibold">location is required.</p>
                 )}
+                </label>
                 <label htmlFor="description" className=' w-full  gap-2 flex flex-col'>Description  &nbsp;
-            <input type="text" id="description" className='w-full p-2 focus:border-none focus:outline-none' {...register('description', {required : true})} placeholder='Description'/></label>
+            <input type="text" id="description" className='w-full p-2 border-2  rounded-lg' {...register('description', {required : true})} placeholder='Description'/>
             {errors.description?.type === "required" && (
-                    <p className="errorMsg">description is required.</p>
+                    <p className="text-red-500 font-semibold">description is required.</p>
                 )}
+                </label>
                 
                     <div className='flex flex-col justify-center items-start w-full'>
                         <label htmlFor="jobType-full-time" className='text-lg ' >
@@ -63,19 +65,21 @@ return (
                         })} value="Intern" />&nbsp;Internship</label>
                     </div>
             {errors.jobType?.type === "validate" && (
-                    <p className="errorMsg">{errors.jobType.message}</p>
+                    <p className="text-red-500 font-semibold">{errors.jobType.message}</p>
                 )}
                 <label htmlFor="requirements" className=' w-full  gap-2 flex flex-col'>Requirements (comma-seperated)  &nbsp;
-            <input type="text" id="requirements" className='w-full p-2 focus:border-none focus:outline-none' {...register('requirements', {required : true})}  placeholder='Requirements'/></label>
+            <input type="text" id="requirements" className='w-full p-2 border-2  rounded-lg' {...register('requirements', {required : true})}  placeholder='Requirements'/>
             {errors.requirements?.type === "required" && (
-                    <p className="errorMsg">requirements is required.</p>
+                    <p className="text-red-500 font-semibold">requirements is required.</p>
                 )}
+                </label>
                 <label htmlFor="vacancies" className=' w-full  gap-2 flex flex-col'>Vacancies  &nbsp;
-            <input type="number" id="vacancies" className='w-full p-2 focus:border-none focus:outline-none' {...register('vacancies', {required : true})} placeholder='Vacancies'/></label>
+            <input type="number" id="vacancies" className='w-full p-2 border-2  rounded-lg' {...register('vacancies', {required : true})} placeholder='Vacancies'/>
             {errors.vacancies?.type === "required" && (
-                    <p className="errorMsg">vacancies is required.</p>
+                    <p className="text-red-500 font-semibold">vacancies is required.</p>
                 )}
-        <button type='submit' className='px-6 py-1 bg-blue-600 text-white font-medium rounded-2xl' disabled={disabled} >Post Job</button>
+                </label>
+        <button type='submit' className='px-10 py-2 bg-blue-600 text-white font-medium rounded-2xl' disabled={disabled} >Post Job</button>
     </form>
   )
 }

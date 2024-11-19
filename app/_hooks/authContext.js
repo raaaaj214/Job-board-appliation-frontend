@@ -17,11 +17,9 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(true)
     else
     setIsLoggedIn(false)
-    console.log(data)
       }
   
       fetchData();
-      console.log("auth")
   }, [isLoggedIn]);
 
   return (

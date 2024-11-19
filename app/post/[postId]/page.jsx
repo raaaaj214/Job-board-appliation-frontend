@@ -6,12 +6,11 @@ import jobTypeImg from "../../../public/assets/71200.png"
 import { toast } from 'react-toastify'
 import { Router, useRouter, useSearchParams } from 'next/navigation'
 
-const page = ({params}) => {
+const Page = ({params}) => {
   const [jobData , setJobData] = useState({})
   const [loading , setLoading] = useState(true)
   const searchParams = useSearchParams()
   const  displayParam = searchParams.get('t')
-  console.log(typeof(displayParam))
   const router = useRouter()
   useEffect(() => {
     fetch(`http://localhost:4000/user/getonejob/${params.postId}` , {
@@ -19,13 +18,12 @@ const page = ({params}) => {
       cache : "no-cache"
     }).then((res) => {
        res.json().then((data)=>{
-        console.log(data.jobData)
         setJobData(data.jobData)
         setLoading(false)
        })
       
     }).catch((err) =>{
-      console.log(err)
+      console.error(err)
     })
   }, [])
 
@@ -38,59 +36,63 @@ const page = ({params}) => {
               toast(data.message)
               
             }
-            ).catch((err) => console.log(err))
-      }).catch((err) => console.log(err))
+            ).catch((err) => console.error(err))
+      }).catch((err) => console.error(err))
   }
   return (
-    loading === true ? <div>Loading</div> : 
-    <div className='flex flex-col justify-center items-center py-8 px-2 gap-4'>
-      <h1 className='font-bold text-2xl '>{jobData.position?.toUpperCase()}</h1>
-      <div className=" rounded-lg flex flex-col justify-center items-center gap-8 bg-gray-300 p-4">
+    loading === true ? <div className=' h-40 w-full flex justify-center items-center text-2xl font-bold'>Loading Content</div>  : 
+    <div className='flex flex-col justify-center items-center py-8 px-2 gap-4 w-full'>
+      <h1 className='font-bold text-4xl text-primary'>{jobData.position?.toUpperCase()}</h1>
+      <div className="sm:w-6/12 rounded-2xl flex flex-col justify-center items-center gap-8 bg-white pt-6 md:pt-12 pb-6 px-5 md:px-10">
         <div className="flex flex-col justify-center items-center w-full gap-6">
-          <div className="w-full flex flex-col justify-center items-start ">
-            <h2 className='font-bold text-lg'>{jobData.position?.toUpperCase()}</h2>
+          {/* <div className="w-full flex flex-col justify-center items-start ">
+            <h2 className='font-bold text-2xl'>{jobData.position?.toUpperCase()}</h2>
             <p className='font-semibold text-md'>{jobData.companyName?.toUpperCase()}</p>
-          </div>
+          </div> */}
           <div className="w-full flex justify-start items-start flex-wrap gap-y-4 ">
-            <span className='w-3/6 flex flex-col justify-center items-center gap-1 '>
+            <span className='w-3/6 flex flex-col justify-center items-start gap-1 '>
               <span className='flex justify-start items-center gap-1'>
-              <Image 
+              {/* <Image 
                 src={locationImg}
                 width={20}
                 height={20}
                 alt='icon'
-              /> <b>Location</b> </span>
+              />  */}
+              <b>Location</b> </span>
               <p>{jobData.location}</p>
             </span>
-            <span className='w-3/6 flex flex-col justify-center items-center gap-1'>
+            <span className='w-3/6 flex flex-col justify-center items-start gap-1'>
               <span className='flex justify-start items-center gap-1'>
-            <Image 
+            {/* <Image 
                 src={jobTypeImg}
                 width={20}
                 height={20}
                 alt='icon'
-              /> <b>Job&nbsp;Type</b> </span>
+              />  */}
+              <b>Job&nbsp;Type</b> </span>
             <p>{jobData.jobType}</p>
             </span>
-            <span className='w-3/6 flex flex-col justify-center items-center gap-1'>
+            <span className='w-3/6 flex flex-col justify-center items-start gap-1'>
               <span className='flex justify-start items-center gap-1'>
-            <Image 
+            {/* <Image 
                 src={jobTypeImg}
                 width={20}
                 height={20}
                 alt='icon'
-              /> <b>Vacancies</b> </span>
-            <p className='self-center'>{jobData.vacancies}</p>
+              />  */}
+              <b>Vacancies</b> </span>
+            <p className=''>{jobData.vacancies}</p>
             </span>
-            <span className='w-3/6 flex flex-col justify-center items-center gap-1'>
+            <span className='w-3/6 flex flex-col justify-center items-start gap-1'>
               <span className='flex justify-start items-center gap-1'>
-            <Image 
+            {/* <Image 
                 src={jobTypeImg}
                 width={20}
                 height={20}
                 alt='icon'
-              /> <b>Applications</b> </span>
-            <p className='self-center'>{jobData.applications ? jobData.applications.length : 0  }</p>
+              />  */}
+              <b>Applications</b> </span>
+            <p className=''>{jobData.applications ? jobData.applications.length : 0  }</p>
             </span>
             </div>
             </div>
@@ -103,12 +105,12 @@ const page = ({params}) => {
                 <h3 className='font-semibold text-lg'>Requirements</h3>
                 <ul className='flex  justify-start flex-wrap items-start gap-2'>
                 {jobData.requirements?.map((req) => {
-                  return <li className='px-2 py-1 bg-gray-500 rounded-2xl'>{req}</li>
+                  return <li key={req} className='py-1 bg-secondary text-white px-6 rounded-2xl'>{req}</li>
                 })}
                 </ul>
               </div>
             </div>
-            <div className="felx flex-col justify-center items-start gap-4">
+            <div className="felx flex-col justify-center items-start gap-4 bg-accent py-4 px-6 rounded-2xl">
         <div className="w-full flex justify-start items-cente gap-4">
           <img src={jobData.companyId?.logo} alt="" className='w-10 h-10 rounded-[50%]'/>
           <h3>{jobData.companyId?.name}</h3>
@@ -119,10 +121,10 @@ const page = ({params}) => {
           </div>
       </div>
       {displayParam == 'true' ?
-      <></> : <button onClick={() => {jobApplyHandler()}}>Apply</button>}
+      <></> : <button className='bg-primary rounded-full px-12 py-2  text-white font-semibold' onClick={() => {jobApplyHandler()}}>Apply</button>}
       </div>
     </div>
   )
 }
 
-export default page
+export default Page

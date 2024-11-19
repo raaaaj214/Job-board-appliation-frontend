@@ -17,7 +17,6 @@ const PostContainer = ({search}) => {
             cache : "no-cache"
         }) 
         const postData = await res.json();
-        console.log(postData)
         if(postData){
             setPosts(postData.jobs)
         }
@@ -30,13 +29,16 @@ const PostContainer = ({search}) => {
   return (
     <div className='w-full flex flex-col py-4 justify-center items-center gap-6 sm:flex-row flex-wrap sm:px-4 lg:px-16 xl:px-40'>
 
-      {posts?.map((post) => (
+      { posts?.length > 0  ? ( posts?.map((post) => (
         
         <Post  key={post._id} post={post}/>
       ))
        || (
-        <div><h1>Company Account</h1></div>) 
+        <div><h1 className='text-2xl font-semibold'>Company Account</h1></div>) ) : (
+        <div><h1 className='text-2xl font-semibold'>No Posts Found</h1></div>
+        )
       }
+
     </div>
   )
 }

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import Upload from '../_components/UploadPost/Upload'
 
-const page = () => {
+const Page = () => {
     const router = useRouter()
     const [loading , setLoading] = useState(true)
 
@@ -26,12 +26,12 @@ const page = () => {
         fetchData()
     } , [])
   return (
-    loading === true ? <div>Wait</div> : 
-    <div className='flex flex-col justify-center items-center gap-16 p-4'>
+    loading === true ? <div className=' h-40 w-full flex justify-center items-center text-2xl font-bold'>Loading Content</div>  : 
+    <div className='flex flex-col justify-center items-center gap-5 py-16 px-4'>
       <h1 className='text-2xl font-bold'>Upload A New Job Requirement</h1>
       <Upload/>
     </div>
   )
 }
 
-export default page
+export default Page

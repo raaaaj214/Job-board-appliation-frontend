@@ -1,13 +1,15 @@
 "use client";
-import { redirect, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import axios from "axios";
+import defaultImage from "../../_assets/blank-profile-picture-973460_640.png"
+import Link from "next/link";
 
-const page = () => {
+const Page = () => {
     const router = useRouter();
+    const [imageLink , setImageLink] = useState(defaultImage.src)
     const searchParams = useSearchParams();
     const paramType = searchParams.get("type");
     const [type, setType] = useState(paramType);
@@ -20,10 +22,13 @@ const page = () => {
     } = useForm();
   
     useEffect(() => {
-      console.log(type);
       router.push(`?type=${type}`);
     }, [type]);
   
+    const loadFile = (event) => {
+      const url = URL.createObjectURL(event.target.files[0])
+      setImageLink(url)
+    }
     const clickHandler = (val) => {
       setType(val);
     };
@@ -54,45 +59,61 @@ const page = () => {
       const res = await axios.post(url , form , {
         withCredentials : true,
       })
-      console.log(res)
       toast(res.data.message);
       setDisabled(false)
       if (res.data.success == true) {
-        redirect(`/auth/login?type=${type}`)
+        router.push(`/auth/login?type=${type}`)
       }
     }
       return (
-        <div>  
+        <div className='w-full bg-accent min-h-dvh pt-4 md:pt-0 flex flex-col md:flex-row md:gap-12 lg:gap-40 justify-center items-center'>
+          <div className=' flex flex-col justify-center items-center'>
+        <h1 className='text-primary font-black text-4xl md:text-6xl lg:text-7xl '>Onboard</h1>
+        <p className='md:text-lg lg:text-2xl  '>We believe in connections</p>
+      </div>
+        <div  className=' bg-white shadow-lg justify-center items-center px-6 py-6 flex flex-col sm:m-w-80 rounded-xl'>  
+        <div className='flex justify-center items-center gap-8'>
           <button
+              className='p-2 text-white text-sm rounded-md'
             onClick={() => {
               clickHandler("employee");
             }}
+            style={type == 'employee' ? {background : "#2196f3"} : {color : "grey"}}
           >
             Employee
           </button>
           <button
+          className='p-2 text-white text-sm rounded-md'
             onClick={() => {
               clickHandler("company");
             }}
+            style={type == 'company' ? {background : "#2196f3"} : {color : "grey"}} 
           >
             Company
           </button>
+          </div>
           {type == "employee" ? (
-            <form onSubmit={handleSubmit(submitHandler)}>
-              <label htmlFor="profilepic">
+            <form
+            className='w-full flex flex-col justify-evenly gap-4 items-center  pt-4'
+            onSubmit={handleSubmit(submitHandler)}>
+              <label htmlFor="profilePicture" className="w-full  flex justify-start items-center gap-6">
                 Profile Picture
+                <img width={60}  height={60} className="mt-4 rounded-full aspect-square" src={imageLink} alt="" />
                 <input
+                 className='hidden w-72 p-1 focus:border-none focus:outline-none' 
                   type="file"
                   id="profilePicture"
-                  {...register("profilePicture", { required: true })}
+                  {...register("profilePicture", { required: true , 
+                  onChange : loadFile })}
                 />
                 {errors.profilepic?.type === "required" && (
                   <p className="errorMsg">Profile Picture is required.</p>
                 )}
               </label>
               <label htmlFor="firstName">
-                First Name
+                First Name<br/>
                 <input
+                 className='border-2 border-gray-200 rounded-lg border-solid  w-72 p-1 focus:outline-none' 
                   type="text"
                   id="firstName"
                   {...register("firstName", { required: true })}
@@ -102,8 +123,9 @@ const page = () => {
                 )}
               </label>
               <label htmlFor="lastName">
-                Last Name
+                Last Name<br/>
                 <input
+                 className='border-2 border-gray-200 rounded-lg border-solid  w-72 p-1 focus:outline-none' 
                   type="text"
                   id="lastName"
                   {...register("lastName", { required: true })}
@@ -113,8 +135,9 @@ const page = () => {
                 )}
               </label>
               <label htmlFor="email">
-                Email
+                Email<br/>
                 <input
+                 className='border-2 border-gray-200 rounded-lg border-solid  w-72 p-1 focus:outline-none' 
                   type="email"
                   id="email"
                   {...register("email", { required: true })}
@@ -124,8 +147,9 @@ const page = () => {
                 )}
               </label>
               <label htmlFor="password">
-                Password
+                Password<br/>
                 <input
+                 className='border-2 border-gray-200 rounded-lg border-solid  w-72 p-1 focus:outline-none' 
                   type="password"
                   id="password"
                   {...register("password", { required: true, minLength: 6 })}
@@ -139,26 +163,33 @@ const page = () => {
                   </p>
                 )}
               </label>
-              <button type="submit" disabled={disabled}>
+              <button className='w-40  p-2 text-white text-sm rounded-md bg-tertiary' type="submit" disabled={disabled}>
                 Register
-              </button>
+              </button><p className="mt-2">Have an account? &nbsp;
+              <Link href={"/auth/login/?type=" + type} className='text-secondary active:text-violet-900 font-semibold'>Sign In </Link>
+              </p>
             </form>
           ) : (
-            <form onSubmit={handleSubmit(submitHandler)}>
-              <label htmlFor="logo">
+            <form
+            className='w-full flex flex-col justify-evenly gap-4 items-center  pt-4'
+            onSubmit={handleSubmit(submitHandler)}>
+              <label htmlFor="logo" className="w-full flex justify-start items-center gap-6">
                 Logo
+                <img width={60}  height={60} className="mt-4 rounded-full aspect-square" src={imageLink} alt="" />
                 <input
+                className='hidden w-72 p-1 focus:border-none focus:outline-none'
                   type="file"
                   id="logo"
-                  {...register("logo", { required: true })}
+                  {...register("logo", { required: true, onChange : loadFile})}
                 />
                 {errors.logo?.type === "required" && (
                   <p className="errorMsg">Logo is required.</p>
                 )}
               </label>
               <label htmlFor="name">
-                Name of the Company
+                Name of the Company<br/>
                 <input
+                className='border-2 border-gray-200 rounded-lg border-solid  w-72 p-1 focus:outline-none'
                   type="text"
                   id="name"
                   {...register("name", { required: true })}
@@ -168,8 +199,9 @@ const page = () => {
                 )}
               </label>
               <label htmlFor="description">
-              Description
+              Description<br/>
                 <input
+                className='border-2 border-gray-200 rounded-lg border-solid  w-72 p-1 focus:outline-none'
                   type="text"
                   id="description"
                   {...register("description", { required: true })}
@@ -179,8 +211,9 @@ const page = () => {
                 )}
               </label>
               <label htmlFor="email">
-                Email
+                Email<br/>
                 <input
+                className='border-2 border-gray-200 rounded-lg border-solid  w-72 p-1 focus:outline-none'
                   type="email"
                   id="email"
                   {...register("email", { required: true })}
@@ -190,8 +223,9 @@ const page = () => {
                 )}
               </label>
               <label htmlFor="password">
-                Password
+                Password<br/>
                 <input
+                className='border-2 border-gray-200 rounded-lg border-solid  w-72 p-1 focus:outline-none'
                   type="password"
                   id="password"
                   {...register("password", { required: true, minLength: 6 })}
@@ -205,14 +239,18 @@ const page = () => {
                   </p>
                 )}
               </label>
-              <button type="submit" disabled={disabled}>
+              <button className='w-40  p-2 text-white text-sm rounded-md bg-tertiary' type="submit" disabled={disabled}>
                 Register
               </button>
+              <p className="mt-2">Have an account? &nbsp;
+              <Link href={"/auth/login/?type=" + type} className='text-secondary active:text-violet-900 font-semibold'>Sign In </Link>
+              </p>
             </form>
           )}
+        </div>
         </div>
       );
     
 };
 
-export default page;
+export default Page;
